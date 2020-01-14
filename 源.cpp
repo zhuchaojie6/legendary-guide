@@ -2,32 +2,32 @@
 #include <algorithm>
 using namespace std;
 
+int pailieshu[40320][8];
+
 void pailie() {
-	int n;
-	FILE *fp = NULL;
-	fopen_s(&fp, "d://pailie.txt", "w");
 	int a[8] = { 1,2,3,4,5,6,8,9 };
+	int n = 0;
 	do {
-		for (int i = 0; i<8; i++)
-			fprintf(fp, "%d ", a[i]);
-		fprintf(fp, "\n");
+		for (int i = 0; i < 8; i++)
+			pailieshu[n][i] = a[i];
+		n++;
 	} while (next_permutation(a, a + 8));
-	fclose(fp);
-	return ;
+	return;
 }
 
 class shudu
 {
 private:
 	int num[9][9];
+	int sum;
 	int move[8] = { 3,6,1,4,7,2,5,8 };
 	int judge0()
 	{
 		int n = 1;
 		for (int i = 0; i < 9; i++)
 		{
-			for(int j=0;j<9;j++)
-				if (num[9][9] != 0)
+			for (int j = 0; j < 9; j++)
+				if (num[i][j] != 0)
 				{
 					n = 0;
 					break;
@@ -42,6 +42,7 @@ public:
 		for (int i = 0; i < 9; i++)
 			for (int j = 0; j < 9; j++)
 				num[i][j] = 0;
+		sum = 0;
 	}
 	void show()
 	{
@@ -52,27 +53,57 @@ public:
 			printf("\n");
 		}
 	}
-	void newone(int n)
+
+	void write(FILE *fp)
 	{
-		FILE *fp = NULL;
-		fopen_s(&fp, "d://pailie.txt", "r");
-		for (int i = 0; i < n; i++)
-			for (int j = 0; j < 8; j++)
-				fscanf_s(fp, "%d", &num[0][1]);
-		for (int i = 0; i < 8; i++)
-			fscanf_s(fp, "%d", &num[0][i + 1]);
+		if (!sum)
+		{
+			sum++;
+		}
+		else
+		{
+			fprintf(fp, "\n");
+		}
+		for (int i = 0; i < 9; i++)
+		{
+			for (int j = 0; j < 9; j++)
+			{
+				if (j == 8)
+					fprintf(fp, "%d", num[i][j]);
+				else fprintf(fp, "%d ", num[i][j]);
+			}
+			fprintf(fp, "\n");
+		}
+
+	}
+
+	void newone(int n, FILE *fp)
+	{
 		num[0][0] = 7;
-		fclose(fp);
+		for (int i = 0; i < 8; i++)
+			num[0][i + 1] = pailieshu[n][i];
 		for (int i = 1; i < 9; i++)
 			for (int j = 0; j < 9; j++)
 				num[i][j] = num[0][(j + move[i - 1]) % 9];
+		write(fp);
 	}
 };
 int main()
 {
 	pailie();
 	shudu n;
-	n.newone(10000);
-	n.show();
+
+	int x = 10;
+	int m;
+	scanf_s("%d", &m);
+	FILE *fp;
+	fp = fopen("sudoku.txt", "w");
+	while (m--)
+	{
+		n.newone(x, fp);
+		x++;
+		x %= 40320;
+	}
+	fclose(fp);
 	system("pause");
 }
