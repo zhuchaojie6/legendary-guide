@@ -358,6 +358,11 @@ int main(int argc,char *argv[])
 			pailie();
 			shudu n;
 			int m = atoi(argv[2]);
+			if (m <= 0)
+			{
+				printf("生成数量应为数字且大于0\n");
+				return 0;
+			}
 			int x = 0 ;
 			FILE *fp;
 			fp = fopen("sudoku.txt", "w");
@@ -374,6 +379,14 @@ int main(int argc,char *argv[])
 			shudu n;
 			FILE *fpr;
 			FILE *fpw;
+			
+			fpr = fopen(argv[2], "r");
+			if (!fpr)
+			{
+				printf("文件打开失败\n");
+				return 0;
+			}
+			fclose(fpr);
 			fpw = fopen("sudoku.txt", "w");
 			fpr = fopen(argv[2], "a");
 			fprintf(fpr, "%d", -1);
@@ -383,6 +396,8 @@ int main(int argc,char *argv[])
 			fclose(fpr);
 			fclose(fpw);
 		}
+		else
+			printf("命令错误\n输入-c加数字进行生成终局操作\n输入-s加路径进行解数组操作\n");
 	}
 	
 	/*pailie();
@@ -397,6 +412,9 @@ int main(int argc,char *argv[])
 	n.solveshudu(fpr, fpw);
 	fclose(fpr);
 	fclose(fpw);
+	pailie();
+	shudu n;
+	FILE *fp;
 	int x = 10;
 	int m;
 	scanf_s("%d", &m);
@@ -407,6 +425,6 @@ int main(int argc,char *argv[])
 	x++;
 	x %= 40320;
 	}
-	fclose(fp);*/
-	system("pause");
+	fclose(fp);
+	system("pause");*/
 }
